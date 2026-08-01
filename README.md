@@ -1,25 +1,31 @@
 # The Listening Storyteller
 
-> An emotion-aware, voice-first AI storyteller that listens, understands, and narrates.
+> An AI storyteller that understands emotion, listens to spoken requests, and narrates with an appropriate voice.
 
-**The Listening Storyteller** is the English portfolio title of **识语绘声**, whose product interface and voice interaction remain Chinese-first.
+**The Listening Storyteller** is the English portfolio title of **识语绘声**. The product interface and voice interaction are primarily Chinese.
 
 The Listening Storyteller is an interactive storytelling application designed for children and families. A user simply speaks about the kind of story they want to hear. The system recognizes the request and emotional context, identifies whether the speaker is a child or an adult, matches a story from a curated local library, selects an appropriate narration style, and streams the generated speech back to the browser.
 
-The experience is fully voice-driven and supports spoken interruption while a story is playing, including changing the story, stopping playback, or making a new request.
+The experience is controlled through voice and supports spoken interruption while a story is playing. A user can change the story, stop playback, or make a new request.
+
+<p align="center">
+  <img src="docs/images/landing-page.png" alt="Landing page of 识语绘声">
+</p>
+
+<p align="center"><em>The landing page invites the user to begin a story through voice.</em></p>
 
 ## Why The Listening Storyteller
 
 Most story applications begin with buttons, search boxes, or fixed categories. The Listening Storyteller explores a different interaction model: the story experience begins with natural speech and adapts to both meaning and emotion.
 
-This project demonstrates an end-to-end multimodal AI pipeline rather than a single model call:
+This project demonstrates a complete multimodal AI pipeline rather than a single model call:
 
-- browser-side voice activity detection and recording;
+- voice activity detection and recording in the browser;
 - speech recognition with emotion metadata;
-- child/adult speaker classification;
-- LLM-based story-tag and narration-tone selection;
+- classification of the speaker as a child or an adult;
+- selection of story tags and narration tone with an LLM;
 - local semantic story matching across 103 stories;
-- low-latency streaming text-to-speech;
+- speech synthesis that streams audio with low delay;
 - voice interruption and intent classification during playback.
 
 ## System Architecture
@@ -47,7 +53,7 @@ flowchart LR
 ## Interaction Flow
 
 1. The browser requests microphone permission after an explicit user action.
-2. A lightweight volume-based detector starts recording when speech is detected.
+2. A lightweight detector based on volume starts recording when speech is detected.
 3. FastAPI validates the upload, enforces a size limit, and converts it to 16 kHz mono WAV.
 4. Qwen3-ASR-Flash produces transcription and emotion information.
 5. Qwen3-Omni-Flash classifies the speaker as a child or an adult.
@@ -56,16 +62,22 @@ flowchart LR
 8. CosyVoice-v3-Flash streams MP3 audio to the browser as it is generated.
 9. During playback, the microphone can capture commands such as “change the story” or “stop”.
 
+<p align="center">
+  <img src="docs/images/listening-mode.png" alt="Listening interface of 识语绘声">
+</p>
+
+<p align="center"><em>The listening interface presents recording status through a simple robot expression and audio animation.</em></p>
+
 ## Key Engineering Features
 
-- **Voice-first UX** — no text input is required for the primary workflow.
-- **Streaming responses** — Server-Sent Events report processing progress while TTS audio is streamed separately.
+- **Spoken interaction** — no text input is required for the primary workflow.
+- **Streaming responses** — SSE reports processing progress while TTS audio is streamed separately.
 - **Defensive model parsing** — JSON fences, invalid tags, unknown tones, missing fields, and malformed intent results are handled safely.
-- **Concurrency-safe classification** — speaker results are accumulated locally instead of being stored in shared global state.
+- **Concurrent request handling** — speaker results are accumulated locally instead of being stored in shared global state.
 - **Recording session isolation** — cancelled recordings and short noise bursts cannot create ghost requests.
-- **Lifecycle management** — temporary audio and expired in-memory tasks are removed automatically.
+- **Lifecycle management** — temporary audio and expired tasks stored in memory are removed automatically.
 - **Playback recovery** — a visible fallback control appears when browser autoplay is blocked.
-- **Security-conscious defaults** — secrets, local environments, recordings, generated media, logs, and caches are excluded from Git.
+- **Secure defaults** — secrets, local environments, recordings, generated media, logs, and caches are excluded from Git.
 - **Automated verification** — unit and route tests run in GitHub Actions without calling paid model APIs.
 
 ## Technology Stack
@@ -90,7 +102,7 @@ flowchart LR
 ├── main.py                    # Local application entry point
 ├── story.json                 # Tagged local story library
 ├── static/
-│   ├── index.html             # Single-page voice interface
+│   ├── index.html             # Voice interface on one page
 │   ├── script.js              # Recording, state machine, playback, and interruption
 │   └── style.css              # Robot interface and responsive styling
 ├── tests/
@@ -182,34 +194,34 @@ pytest
 python -m py_compile app.py core.py main.py
 ```
 
-The automated test suite uses no live model calls and consumes no API credits. A full microphone-to-playback test requires FFmpeg and a valid API key.
+The automated test suite uses no live model calls and consumes no API credits. A complete test from microphone input to audio playback requires FFmpeg and a valid API key.
 
 ## Security and Privacy
 
 - API keys are read from environment variables and are never embedded in frontend code.
 - `.env` is excluded by `.gitignore`; only `.env.example` is committed.
 - Uploaded and generated audio files are excluded from version control.
-- Uploads are size-limited and processed in chunks rather than loaded into memory at once.
+- Upload size is limited, and files are processed in chunks rather than loaded into memory at once.
 - Temporary tasks and audio files expire and are cleaned automatically.
 - The health endpoint reports only whether a key exists, never its value.
 
-Voice data is sent to a third-party model provider during normal use. A public production deployment should add authentication, rate limiting, a privacy notice, content-safety controls, and explicit guardian consent for child users.
+Voice data is sent to an external model provider during normal use. A public production deployment should add authentication, rate limiting, a privacy notice, content safety controls, and explicit guardian consent for child users.
 
 ## Current Scope and Roadmap
 
-The current implementation is optimized for a local or single-instance portfolio demonstration. Potential next steps include:
+The current implementation is optimized for a local portfolio demonstration that runs as one service instance. Potential next steps include:
 
-- Redis-backed task state for multi-instance deployment;
-- configurable story-library management;
+- Redis storage for task state across multiple service instances;
+- configurable management of the story library;
 - semantic embedding retrieval instead of tag overlap alone;
-- stronger echo-aware interruption detection;
-- request authentication and per-user rate limits;
-- end-to-end browser tests with synthetic microphone input;
+- stronger interruption detection that filters speaker echo;
+- request authentication and rate limits for each user;
+- complete browser tests with synthetic microphone input;
 - multilingual stories and narration.
 
 ## Resume Summary
 
-> Built The Listening Storyteller, an emotion-aware voice storytelling application using FastAPI, Qwen multimodal models, and CosyVoice streaming TTS. Designed a browser audio state machine with voice activity detection and spoken interruption, implemented validated LLM output handling and story matching across 103 local stories, and added secure temporary-file lifecycle management, automated tests, and GitHub Actions CI.
+> Built The Listening Storyteller, a voice storytelling application that understands emotion and uses FastAPI, Qwen multimodal models, and CosyVoice streaming TTS. Designed a browser audio state machine with voice activity detection and spoken interruption, implemented validated LLM output handling and story matching across 103 local stories, and added secure management of temporary files, automated tests, and GitHub Actions CI.
 
 ## Responsible Use
 
