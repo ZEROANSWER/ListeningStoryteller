@@ -1,0 +1,347 @@
+/* ==================== 基础 ==================== */
+:root {
+    --primary: #5ccfff;
+    --primary-dim: rgba(92, 207, 255, 0.3);
+    --glow: rgba(92, 207, 255, 0.6);
+    --dark-bg: #0f1722;
+    --dark-visor: linear-gradient(145deg, #1a2432, #0f1722);
+    --text-light: #bfefff;
+    --text-dim: rgba(191, 239, 255, 0.5);
+    --white: #ffffff;
+    --border: #e6ebf2;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--white);
+}
+
+.hidden { display: none !important; }
+
+/* ==================== 着陆页 ==================== */
+.landing-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at 30% 40%, rgba(92, 207, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 60%, rgba(255, 107, 107, 0.06) 0%, transparent 50%),
+        #f8faff;
+}
+
+.landing-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.landing-icon {
+    font-size: 72px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.landing-title {
+    font-size: 48px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6C63FF, #FF6B6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.landing-subtitle {
+    font-size: 16px;
+    color: #636E72;
+    max-width: 400px;
+    line-height: 1.6;
+}
+
+.start-btn {
+    margin-top: 20px;
+    padding: 16px 48px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #6C63FF, #8B83FF);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    box-shadow: 0 6px 30px rgba(108, 99, 255, 0.35);
+    font-family: inherit;
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(108, 99, 255, 0.45);
+}
+
+.start-btn:active {
+    transform: translateY(0);
+}
+
+.start-btn-icon {
+    font-size: 22px;
+}
+
+.landing-hint {
+    font-size: 13px;
+    color: #B2BEC3;
+    margin-top: -4px;
+}
+
+/* ==================== 机器人页 ==================== */
+.robot-page {
+    height: 100vh;
+    background: var(--white);
+}
+
+.face {
+    position: fixed;
+    inset: 0;
+    border: 8px solid var(--border);
+}
+
+.visor {
+    position: absolute;
+    inset: 4%;
+    background: var(--dark-visor);
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* ==================== 眼睛 ==================== */
+.eye {
+    position: absolute;
+    top: 22%;
+    width: 80px;
+    height: 100px;
+    background: radial-gradient(circle at 30% 30%, #bfefff, #5ccfff);
+    border-radius: 50% / 60%;
+    animation: blink 6s infinite;
+    box-shadow: 0 0 30px rgba(92, 207, 255, 0.3);
+}
+
+.eye.left { left: 22%; }
+.eye.right { right: 22%; }
+
+
+
+@keyframes blink {
+    0%, 93%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.1); }
+}
+
+/* 眼睛状态 */
+.eye.listening {
+    animation: blink 6s infinite, eye-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes eye-pulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(92, 207, 255, 0.3); }
+    50% { box-shadow: 0 0 50px rgba(92, 207, 255, 0.6); }
+}
+
+.eye.processing {
+    animation: blink 6s infinite, eye-think 0.8s ease-in-out infinite;
+}
+
+@keyframes eye-think {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.85) scaleX(1.05); }
+}
+
+/* ==================== 嘴巴区域 ==================== */
+.mouth-area {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 打字机文字 */
+.mouth-text {
+    color: var(--text-light);
+    font-size: 18px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.8;
+    max-width: 100%;
+    word-break: break-all;
+}
+
+.mouth-text .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--primary);
+    margin-left: 2px;
+    animation: cursor-blink 0.8s infinite;
+    vertical-align: text-bottom;
+}
+
+@keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 波浪 Canvas */
+.wave-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* 监听脉冲指示器 */
+.listen-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 60px;
+}
+
+.listen-dot {
+    width: 6px;
+    border-radius: 3px;
+    background: var(--primary);
+    animation: listen-bounce 1.2s ease-in-out infinite;
+}
+
+.listen-dot:nth-child(1) { height: 20px; animation-delay: 0s; }
+.listen-dot:nth-child(2) { height: 32px; animation-delay: 0.15s; }
+.listen-dot:nth-child(3) { height: 44px; animation-delay: 0.3s; }
+.listen-dot:nth-child(4) { height: 32px; animation-delay: 0.45s; }
+.listen-dot:nth-child(5) { height: 20px; animation-delay: 0.6s; }
+
+@keyframes listen-bounce {
+    0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+
+/* 说话中 - 动态跳动 */
+.listen-indicator.speaking .listen-dot {
+    animation: speak-bounce 0.4s ease-in-out infinite alternate;
+}
+
+.listen-indicator.speaking .listen-dot:nth-child(1) { animation-delay: 0s; }
+.listen-indicator.speaking .listen-dot:nth-child(2) { animation-delay: 0.08s; }
+.listen-indicator.speaking .listen-dot:nth-child(3) { animation-delay: 0.16s; }
+.listen-indicator.speaking .listen-dot:nth-child(4) { animation-delay: 0.24s; }
+.listen-indicator.speaking .listen-dot:nth-child(5) { animation-delay: 0.32s; }
+
+@keyframes speak-bounce {
+    0% { transform: scaleY(0.3); }
+    100% { transform: scaleY(1.2); }
+}
+
+/* ==================== 状态标签 ==================== */
+.status-label {
+    position: absolute;
+    top: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    color: var(--text-dim);
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* ==================== 故事名称 左下角 ==================== */
+.story-label {
+    position: absolute;
+    bottom: 60px;
+    left: 28px;
+    font-size: 14px;
+    color: var(--text-dim);
+    background: rgba(92, 207, 255, 0.08);
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(92, 207, 255, 0.15);
+}
+
+.story-label::before {
+    content: "📖 ";
+}
+
+/* ==================== 返回按钮 ==================== */
+.reset-btn-robot {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 24px;
+    border: 1px solid rgba(92, 207, 255, 0.25);
+    border-radius: 20px;
+    background: rgba(92, 207, 255, 0.06);
+    color: var(--text-dim);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+}
+
+.reset-btn-robot:hover {
+    background: rgba(92, 207, 255, 0.15);
+    color: var(--text-light);
+    border-color: rgba(92, 207, 255, 0.4);
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 600px) {
+    .landing-title { font-size: 32px; }
+    .landing-subtitle { font-size: 14px; }
+    .start-btn { padding: 14px 36px; font-size: 16px; }
+
+    .visor { border-radius: 24px; }
+    .eye { width: 55px; height: 70px; top: 25%; }
+    .eye.left { left: 18%; }
+    .eye.right { right: 18%; }
+    .eye-pupil { width: 20px; height: 20px; }
+
+    .mouth-area { width: 75%; height: 80px; top: 52%; }
+    .mouth-text { font-size: 15px; }
+
+    .story-label { font-size: 12px; bottom: 50px; left: 16px; }
+    .reset-btn-robot { bottom: 14px; font-size: 11px; }
+}
+
+.play-btn {
+    position: absolute;
+    top: 68%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 24px;
+    border: 1px solid rgba(92, 207, 255, 0.45);
+    border-radius: 22px;
+    background: rgba(92, 207, 255, 0.14);
+    color: var(--text-light);
+    font: inherit;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.play-btn:hover {
+    background: rgba(92, 207, 255, 0.24);
+}

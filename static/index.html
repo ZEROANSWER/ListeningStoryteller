@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>识语绘声 · 智能故事机</title>
+    <link rel="stylesheet" href="/static/style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+          rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ========== 着陆页 ========== -->
+<div id="landingPage" class="landing-page">
+    <div class="landing-content">
+        <div class="landing-icon">📖</div>
+        <h1 class="landing-title">识语绘声</h1>
+        <p class="landing-subtitle">基于大模型语义理解与情感语音合成的智能故事机</p>
+        <button id="startBtn" class="start-btn">
+            <span class="start-btn-icon">🎙️</span>
+            开始体验
+        </button>
+        <p class="landing-hint">点击后将自动开启麦克风</p>
+    </div>
+</div>
+
+<!-- ========== 机器人页 ========== -->
+<div id="robotPage" class="robot-page hidden">
+    <div class="face">
+        <div class="visor">
+            <!-- 眼睛 -->
+            <div class="eye left">
+                <div class="eye-pupil"></div>
+            </div>
+            <div class="eye right">
+                <div class="eye-pupil"></div>
+            </div>
+
+            <!-- 嘴巴区域 -->
+            <div class="mouth-area">
+                <!-- 打字机文字层 -->
+                <div id="mouthText" class="mouth-text"></div>
+                <!-- 波浪 Canvas 层 -->
+                <canvas id="waveCanvas" class="wave-canvas hidden"></canvas>
+                <!-- 听你说话时的脉冲指示 -->
+                <div id="listenIndicator" class="listen-indicator hidden">
+                    <div class="listen-dot"></div>
+                    <div class="listen-dot"></div>
+                    <div class="listen-dot"></div>
+                    <div class="listen-dot"></div>
+                    <div class="listen-dot"></div>
+                </div>
+            </div>
+
+            <!-- 状态小字 -->
+            <div id="statusLabel" class="status-label"></div>
+
+            <!-- 故事名称 左下角 -->
+            <div id="storyLabel" class="story-label hidden"></div>
+
+            <!-- 返回按钮 底部居中 -->
+            <button id="playBtn" class="play-btn hidden">点击继续播放</button>
+            <button id="resetBtn" class="reset-btn-robot">返回首页</button>
+        </div>
+    </div>
+
+    <!-- 隐藏的音频播放器 -->
+    <audio id="audioPlayer" style="display:none;"></audio>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

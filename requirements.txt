@@ -1,0 +1,7 @@
+fastapi==0.141.1
+uvicorn[standard]==0.52.0
+python-multipart==0.0.32
+pydub==0.25.1
+python-dotenv==1.2.2
+dashscope==1.26.5
+openai==2.52.0
