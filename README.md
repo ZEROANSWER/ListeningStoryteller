@@ -190,7 +190,7 @@ Example response:
 
 ```powershell
 pip install -r requirements-dev.txt
-pytest
+python -m pytest
 python -m py_compile app.py core.py main.py
 ```
 

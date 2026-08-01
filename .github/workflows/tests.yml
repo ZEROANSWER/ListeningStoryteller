@@ -14,5 +14,5 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements-dev.txt
-      - run: pytest
+      - run: python -m pytest
       - run: python -m py_compile app.py core.py main.py
